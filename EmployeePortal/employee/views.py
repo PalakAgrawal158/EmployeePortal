@@ -14,11 +14,16 @@ from django.contrib.auth.models import User
 import random
 from datetime import timedelta
 from django.utils import timezone
+from commanServices.email_sender import SendEmail
 
 # Create your views here.
+
+
 class RegisterUser(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAdminUser]
+
+    #Employee registered by admin only
     def post(self, request):
         try:
             serializer = EmployeeSerializer(data = request.data)
@@ -31,7 +36,7 @@ class RegisterUser(APIView):
         except Exception as error:
             return JsonResponse({"error": str(error)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
+#Login can be accessed by anyone
 class LoginUser(APIView):
     def post(self, request):
         try:            
@@ -40,7 +45,6 @@ class LoginUser(APIView):
             if serializer.is_valid():
                 email = serializer.validated_data.get('email')
                 password = serializer.validated_data.get('password') 
-                print("email", email)
                                       
                 user = authenticate(request=request, username=email, password=password)
                 
@@ -65,12 +69,8 @@ class ListEmployees(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAdminUser]
     
+    #List all employees to admin
     def get(self, request):
-        # header = request.headers.get('Authorization')
-
-        # if header and header.startswith('Bearer '):
-        #     jwt_token = header.split(' ')[1]
-        #     print(".........",jwt_token)
         try:
             employees = Employee.objects.all()
             serializer = EmployeeSerializer(employees, many=True)
@@ -84,6 +84,7 @@ class EmployeeDetails(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    #View specific employee details
     def get(self, request):
         token = decode_token(request)
         if token:
@@ -98,8 +99,9 @@ class EmployeeDetails(APIView):
                 return JsonResponse({"error": str(error)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return JsonResponse({'error': 'Authorization header missing'}, status=401)
-        
 
+
+#To decode the jwt token 
 def decode_token(request):
     header = request.headers.get('Authorization')
 
@@ -121,6 +123,7 @@ def decode_token(request):
         
 
 class SendOTP(APIView):
+    #to send OTP to email
     def post(self, request):
         serializer = SendOTPSerializer(data= request.data)
         if serializer.is_valid():
@@ -136,8 +139,12 @@ class SendOTP(APIView):
             
             otp_object = OTP(employee=employee, otp= generated_otp, expiration_time=otp_expiry)
             otp_object.save()
+            result = SendEmail(generated_otp, email)
+            if result: 
 
-            return JsonResponse({"message":"OTP sent successfully"}, status=200)
+                return JsonResponse({"message":"OTP sent successfully"}, status=200)
+            else:
+                return JsonResponse({"message":"OTP not sent "}, status=400)
         return JsonResponse({"error ": serializer.errors}, status=400)
 
 class VerifyOTP(APIView):
@@ -166,8 +173,10 @@ class VerifyOTP(APIView):
             except (Employee.DoesNotExist, OTP.DoesNotExist):
                 return JsonResponse({"message": "Invalid OTP"}, status=400)
         return JsonResponse({"error": serializer.errors}, status=400)
+    
+    
 
-
+# To change password after OTP verification
 class ChangePassword(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
