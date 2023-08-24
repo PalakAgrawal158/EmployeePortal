@@ -27,8 +27,7 @@ class AddHoliday(APIView):
     def delete(self,request):    
         holiday = Holidays.objects.get(pk= request.data['id'])
         holiday.delete()
-        return JsonResponse({"message":"delete"})
-   
+        return JsonResponse({"message":"delete"}) 
 
 
 class ViewHoliday(APIView):
