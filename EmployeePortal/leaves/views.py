@@ -8,6 +8,9 @@ from .serializers import *
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from employee.views import decode_token
+from rest_framework.pagination import PageNumberPagination
+
+
 # Create your views here.
 
 
@@ -29,7 +32,6 @@ class AddLeave(APIView):
                 return JsonResponse({'error': 'Authorization header missing'}, status=400)
         
             serializer = LeavesSerializer(data = request.data)
-
             if serializer.is_valid():
                 serializer.save(employee=employee)
                 return JsonResponse({'message' : 'Leave added successfully'},status=200) 
@@ -52,7 +54,13 @@ class AddLeave(APIView):
                 return JsonResponse({'error': 'Authorization header missing'}, status=400)
             
             leaves = Leaves.objects.filter (employee=employee)
-            serializer = AllLeavesSerializer(leaves , many=True)
+
+            paginator= PageNumberPagination()
+            paginator.page_size = 2
+
+            paginated_leaves = paginator.paginate_queryset(leaves, request)
+
+            serializer = AllLeavesSerializer(paginated_leaves , many=True)
             return JsonResponse({'Leaves' : serializer.data},status=200)
  
         except Exception as error:
@@ -75,7 +83,6 @@ class AdminLeave(APIView):
     def put(self, request):
         print(request.body)
         try:
-            # print(request.data)
             serializer = UpdateLeaveSerializer(data = request.data)
 
             if serializer.is_valid():

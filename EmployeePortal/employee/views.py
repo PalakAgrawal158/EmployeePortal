@@ -8,16 +8,15 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Employee, OTP
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
-import jwt
 from rest_framework_jwt.utils import jwt_decode_handler
 from django.contrib.auth.models import User
 import random
 from datetime import timedelta
 from django.utils import timezone
 from commanServices.email_sender import SendEmail
+from rest_framework.pagination import PageNumberPagination
 
 # Create your views here.
-
 
 class RegisterUser(APIView):
     authentication_classes = [JWTAuthentication]
@@ -56,8 +55,8 @@ class LoginUser(APIView):
                                         "is_admin": user.is_superuser
                                         }, status=status.HTTP_200_OK)
                 else:
-                    return JsonResponse({"message": "Invalid credentials."}, status=status.HTTP_401_UNAUTHORIZED)
-            return JsonResponse({"message": serializer.errors},status=status.HTTP_400_BAD_REQUEST)
+                    return JsonResponse({"message": "Invalid credentials."}, status=401)
+            return JsonResponse({"message": serializer.errors},status=400)
        
         except Exception as error:
             print(error)
@@ -72,8 +71,22 @@ class ListEmployees(APIView):
     def get(self, request):
         try:
             employees = Employee.objects.filter(is_active=True)
-            serializer = EmployeeDetailsSerializer(employees, many=True)
-            return JsonResponse({"Employees":serializer.data},status= status.HTTP_200_OK)
+          
+            paginator= PageNumberPagination()
+            paginator.page_size = 2
+
+            paginated_employees = paginator.paginate_queryset(employees, request)
+
+            serializer = EmployeeDetailsSerializer(paginated_employees, many=True)
+
+            pagination_data={"total_employees": paginator.page.paginator.count,
+                            "total_pages":paginator.page.paginator.num_pages,
+                             "has_next": paginator.page.has_next(),
+                             "has_previous": paginator.page.has_previous()
+                             }
+
+            return JsonResponse({"Employees":serializer.data,
+                                 "pagination_data":pagination_data},status= status.HTTP_200_OK)
         except Exception as error:
             return JsonResponse({"error": str(error)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -133,7 +146,7 @@ class SendOTP(APIView):
             try:
                 employee = Employee.objects.get(email=email)
             except Employee.DoesNotExist:
-                return JsonResponse({"message": "Employee not found." },status=404)
+                return JsonResponse({"message": "Employee not found." },status=401)
             
             otp_object = OTP(employee=employee, otp= generated_otp, expiration_time=otp_expiry)
             otp_object.save()
