@@ -7,3 +7,4 @@ class HolidaySerializer(serializers.ModelSerializer):
         fields= '__all__'
 
 
+

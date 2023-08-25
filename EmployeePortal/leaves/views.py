@@ -72,8 +72,10 @@ class AdminLeave(APIView):
             return JsonResponse({"error": str(error)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     # To update the leave status by admin   
-    def patch(self, request):
+    def put(self, request):
+        print(request.body)
         try:
+            # print(request.data)
             serializer = UpdateLeaveSerializer(data = request.data)
 
             if serializer.is_valid():

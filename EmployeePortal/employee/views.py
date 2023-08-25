@@ -64,7 +64,6 @@ class LoginUser(APIView):
             return JsonResponse({"error": str(error)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-
 class ListEmployees(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAdminUser]
@@ -72,12 +71,11 @@ class ListEmployees(APIView):
     #List all employees to admin
     def get(self, request):
         try:
-            employees = Employee.objects.all()
-            serializer = EmployeeSerializer(employees, many=True)
+            employees = Employee.objects.filter(is_active=True)
+            serializer = EmployeeDetailsSerializer(employees, many=True)
             return JsonResponse({"Employees":serializer.data},status= status.HTTP_200_OK)
         except Exception as error:
             return JsonResponse({"error": str(error)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 
 class EmployeeDetails(APIView):
@@ -93,7 +91,7 @@ class EmployeeDetails(APIView):
                 employee = Employee.objects.filter(pk=user_id).values()
                 if not employee:
                     return JsonResponse({"message": "Employee not found"}, status=401)
-                serializer = EmployeeSerializer(employee, many=True)
+                serializer = EmployeeDetailsSerializer(employee, many=True)
                 return JsonResponse({"Employee":serializer.data},status= status.HTTP_200_OK)
             except Exception as error:
                 return JsonResponse({"error": str(error)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -141,7 +139,6 @@ class SendOTP(APIView):
             otp_object.save()
             result = SendEmail(generated_otp, email)
             if result: 
-
                 return JsonResponse({"message":"OTP sent successfully"}, status=200)
             else:
                 return JsonResponse({"message":"OTP not sent "}, status=400)
@@ -196,6 +193,41 @@ class ChangePassword(APIView):
                 return JsonResponse({"error": str(error)},status=500)
         else:
             return JsonResponse({"error": serializer.errors}, status=400)
+
+
+class UpdateEmployee(APIView):
+    authentication_classes=[JWTAuthentication]
+    permission_classes =[IsAdminUser]
+
+    #To update employee details by admin only
+    def put(self, request, employee_id):
+        try:
+            employee = Employee.objects.get(id=employee_id)
+        except Employee.DoesNotExist:
+            return JsonResponse({"message":"Employee not found"}, status=404)
+
+        serializer = EmployeeSerializer(employee, data= request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse({"message": "Employee updated successfully"},status=200)
+        return JsonResponse({"error": serializer.errors}, status=400)
+
+
+class DeleteEmployee(APIView):
+    authentication_classes=[JWTAuthentication]
+    permission_classes =[IsAdminUser]
+  
+    # To delete employee by id change status is_active  to False
+    def delete(self,request,employee_id):
+        try:  
+            employee = Employee.objects.get(pk= employee_id)
+            employee.is_active = False
+            employee.save()
+            return JsonResponse({"message":"Employee deleted"},status=200) 
+        except Exception as error:
+            print(error)
+            return JsonResponse({"error":str(error)},status=500)
+
 
 
 

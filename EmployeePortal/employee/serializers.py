@@ -44,5 +44,10 @@ class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(write_only=True)
 
 
+class EmployeeDetailsSerializer(serializers.ModelSerializer):
+    class Meta :
+        model = Employee     
+        exclude = ['password',"last_login","is_superuser","is_staff","is_active","date_joined","username","groups","user_permissions"]
+
 
         

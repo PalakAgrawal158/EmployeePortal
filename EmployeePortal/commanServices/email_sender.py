@@ -13,10 +13,10 @@ def SendEmail(generated_otp, email):
         port = 587  # For starttls
         smtp_server = settings.EMAIL_HOST
         sender_email = settings.EMAIL_HOST_USER
-        receiver_email = "yogeshkunkawalekar@gmail.com"
+        receiver_email = email
         password = settings.EMAIL_HOST_PASSWORD
         message = f"""\
-        Subject: Hi there
+        Subject: OTP
 
         This is your OTP - {generated_otp} """
 
