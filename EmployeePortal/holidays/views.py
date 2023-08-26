@@ -13,7 +13,6 @@ class AddHoliday(APIView):
     authentication_classes=[JWTAuthentication]
     permission_classes =[IsAdminUser]
 
-
     #To add holiday by admin only
     def post(self, request):
         serializer = HolidaySerializer(data= request.data)
