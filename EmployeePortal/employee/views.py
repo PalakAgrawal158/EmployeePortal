@@ -144,7 +144,7 @@ class SendOTP(APIView):
             email = serializer.validated_data['email']
 
             generated_otp = str(random.randint(1000,9999))
-            otp_expiry = timezone.now() +timedelta(minutes=5)
+            otp_expiry = timezone.now() +timedelta(minutes=1, seconds=30)
 
             try:
                 employee = Employee.objects.get(email=email)
