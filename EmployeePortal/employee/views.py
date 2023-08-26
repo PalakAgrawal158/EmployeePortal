@@ -18,6 +18,9 @@ from rest_framework.pagination import PageNumberPagination
 
 # Create your views here.
 
+def home(request):
+    return render(request, 'home.html')
+
 class RegisterUser(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAdminUser]
