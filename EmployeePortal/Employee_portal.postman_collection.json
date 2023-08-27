@@ -1,0 +1,737 @@
+{
+	"info": {
+		"_postman_id": "b68f0cfa-1b71-4807-89d4-74be05d8a439",
+		"name": "Employee_portal",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29291633",
+		"_collection_link": "https://crimson-flare-6102.postman.co/workspace/employee_portal~c28d7ebc-722b-48ef-9ca2-9cb82f2561d6/collection/9564971-b68f0cfa-1b71-4807-89d4-74be05d8a439?action=share&source=collection_link&creator=29291633"
+	},
+	"item": [
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "getEmployeeList",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyOTc3OTU0LCJpYXQiOjE2OTI5NzQzNTQsImp0aSI6ImQxYmU1NzJlOTM5YjRiYjc5ZGIxZDRmYWFhMWE3MWM1IiwidXNlcl9pZCI6NX0.pkSjSRgHtIZOT3SWHEOQmdzZBPXkt0f22yBMVoO9VGA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://172.16.0.115:8000/user/list",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"user",
+								"list"
+							]
+						},
+						"description": "We get all employee list"
+					},
+					"response": []
+				},
+				{
+					"name": "adminLogin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin2@gmail.com\",\r\n    \"password\": \"admin@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://172.16.0.115:8000/user/login",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ViewPendingLeaves",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyOTg3MDQ4LCJpYXQiOjE2OTI5ODQwNDgsImp0aSI6IjAyMzFkNjU2YzZiNzRhOThhOTcwNjdhMjU0YTVmYmZiIiwidXNlcl9pZCI6NX0.O0eLq3TW_WG5X3r1LT_TYlpf20r6hJRh64jvQfenkbo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://172.16.0.115:8000/leaves/admin",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"leaves",
+								"admin"
+							]
+						},
+						"description": "To view all pending leaves by admin."
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateLeaveStatus",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyOTg3MDQ4LCJpYXQiOjE2OTI5ODQwNDgsImp0aSI6IjAyMzFkNjU2YzZiNzRhOThhOTcwNjdhMjU0YTVmYmZiIiwidXNlcl9pZCI6NX0.O0eLq3TW_WG5X3r1LT_TYlpf20r6hJRh64jvQfenkbo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"leave_id\":\"6\",\r\n    \"status\":\"Approved\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://172.16.0.115:8000/leaves/admin",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"leaves",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RegisterEmployee",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyOTg3MDQ4LCJpYXQiOjE2OTI5ODQwNDgsImp0aSI6IjAyMzFkNjU2YzZiNzRhOThhOTcwNjdhMjU0YTVmYmZiIiwidXNlcl9pZCI6NX0.O0eLq3TW_WG5X3r1LT_TYlpf20r6hJRh64jvQfenkbo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"Pallavi\",\r\n    \"last_name\": \"Shewale\",\r\n    \"email\": \"pallavi.s@sankeysolutions.com\",\r\n    \"password\": \"12345\",\r\n    \"designation\": \"Solution Analyst\",\r\n    \"blood_group\": \"A+\",\r\n    \"date_of_birth\": \"2001-02-10\",\r\n    \"contact_no\": \"123456794\",\r\n    \"address\": \"Aroli\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://172.16.0.115:8000/user/register",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateEmployee",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyOTkyMzY1LCJpYXQiOjE2OTI5ODkzNjUsImp0aSI6ImIzMDllNGNiZjkxNzQ4MGZhZmJmNzhhMmI2NDA4ZmM3IiwidXNlcl9pZCI6NX0.DXQ9LDvN9DAPSpKUHHgW3OEWh1JM8yDOwzZYdKNz_G8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"Palak\",\r\n    \"last_name\": \"Agrawal\",\r\n\r\n    \"designation\": \"Solution Analyst\",\r\n    \"blood_group\": \"B+\",\r\n    \r\n    \"address\": \"NDB\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://172.16.0.115:8000/user/update/2",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"user",
+								"update",
+								"2"
+							]
+						},
+						"description": "To update employee details"
+					},
+					"response": []
+				},
+				{
+					"name": "DeletEmployee",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyOTkyMzY1LCJpYXQiOjE2OTI5ODkzNjUsImp0aSI6ImIzMDllNGNiZjkxNzQ4MGZhZmJmNzhhMmI2NDA4ZmM3IiwidXNlcl9pZCI6NX0.DXQ9LDvN9DAPSpKUHHgW3OEWh1JM8yDOwzZYdKNz_G8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://172.16.0.115:8000/user/delete/10",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"user",
+								"delete",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddHoliday",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkzMDQ3NTEwLCJpYXQiOjE2OTMwNDQ1MTAsImp0aSI6ImE4MDY2ZWY3MDU2OTRlNTRiZDQ4NzM4OTljOWQyODYwIiwidXNlcl9pZCI6NX0.pxOI3-_CGmgHaysUMFqeioC121zy0ZQ3p4QKSveTM38",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"holiday_name\": \"Republic Day\",\r\n    \"date\": \"2023-01-26\",\r\n    \"day\": \"Thursday\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://172.16.0.115:8000/holidays/add",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"holidays",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateHoliday",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkzMDQ3NTEwLCJpYXQiOjE2OTMwNDQ1MTAsImp0aSI6ImE4MDY2ZWY3MDU2OTRlNTRiZDQ4NzM4OTljOWQyODYwIiwidXNlcl9pZCI6NX0.pxOI3-_CGmgHaysUMFqeioC121zy0ZQ3p4QKSveTM38",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"holiday_name\": \"Independence Day\",\r\n    \"date\": \"2023-08-15\",\r\n    \"day\": \"Tuesday\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://172.16.0.115:8000/holidays/5",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"holidays",
+								"5"
+							]
+						},
+						"description": "To update holiday"
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteHoliday",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "employee",
+			"item": [
+				{
+					"name": "AddLeave",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyOTg2ODEwLCJpYXQiOjE2OTI5ODM4MTAsImp0aSI6IjMzZWVlMDExYTk5YzQ3ZWU4NmI5YjY1OTBlNDJmMWMwIiwidXNlcl9pZCI6MTF9.wTvaqKBth-iFjaLF5PLpgUbBMVIVxItOWMH_hIU35IA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"leave_type\": \"Paid\",\r\n    \"from_date\": \"2023-08-28\",\r\n    \"till_date\": \"2023-08-28\",\r\n    \"no_of_days\": 1,\r\n    \"reason\": \"Festival\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://172.16.0.115:8000/leaves/add",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"leaves",
+								"add"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "viewLeaves",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyOTg2ODEwLCJpYXQiOjE2OTI5ODM4MTAsImp0aSI6IjMzZWVlMDExYTk5YzQ3ZWU4NmI5YjY1OTBlNDJmMWMwIiwidXNlcl9pZCI6MTF9.wTvaqKBth-iFjaLF5PLpgUbBMVIVxItOWMH_hIU35IA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://172.16.0.115:8000/leaves/add?page=1",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"leaves",
+								"add"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EmployeeDetails",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyOTg4NzA2LCJpYXQiOjE2OTI5ODU3MDYsImp0aSI6ImYxMDA1ZjE1MWQ1MjQzNzRhOTMxYjE0MjY2N2Y3ZDQ4IiwidXNlcl9pZCI6MTF9.tio3om5bfeekJhbKOtEtHTWHb2uoA1mP9ePaV4tU-Ls",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://172.16.0.115:8000/user/details",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"user",
+								"details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkzMDQ3NTEwLCJpYXQiOjE2OTMwNDQ1MTAsImp0aSI6ImE4MDY2ZWY3MDU2OTRlNTRiZDQ4NzM4OTljOWQyODYwIiwidXNlcl9pZCI6NX0.pxOI3-_CGmgHaysUMFqeioC121zy0ZQ3p4QKSveTM38",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://172.16.0.115:8000/holidays",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"holidays"
+							]
+						},
+						"description": "To view all holidays by employees as well as admin."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "sendOTP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"yogeshkunkawlekar12@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://172.16.0.115:8000/user/otp",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"user",
+								"otp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verifyOTP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"otp\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://172.16.0.115:8000/user/verify",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"user",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "changePassword",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyOTg4NTc3LCJpYXQiOjE2OTI5ODg1MTcsImp0aSI6IjZlMWU1MjAxYWEwNTQyZDZhY2QwNDdiMjJkODQ5N2RkIiwidXNlcl9pZCI6Mn0.Ggxu4IR_tHcwUJYuc1k65lXmZY8ikDEz9wUH-RfgsKk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"new_password\": \"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://172.16.0.115:8000/user/password",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"user",
+								"password"
+							]
+						},
+						"description": "To change password"
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyOTgyODc3LCJpYXQiOjE2OTI5ODI4MTcsImp0aSI6ImVhZjQ1MmUxOGVhZDRhZWRhZWNhNGNlMDEzMmVkNGMyIiwidXNlcl9pZCI6MTF9.DvJEfGOVvgv_1WrybPL7Fp66BZdc2HJlqwk-TYSsVMk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"ak@gmail.com\",\r\n    \"password\": \"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://172.16.0.115:8000/user/login",
+							"protocol": "http",
+							"host": [
+								"172",
+								"16",
+								"0",
+								"115"
+							],
+							"port": "8000",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "userlist",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjkyODE1ODEzLCJpYXQiOjE2OTI4MTIyMTMsImp0aSI6ImE1MjA1Njk1Y2UzNTQ3ZTU5YzU0ZmEwYTVkNzNmNTI3IiwidXNlcl9pZCI6NX0._XYhsxo8m0l4e1pCd7W5e1jtG4SL4eAXkWF7h8F9xaI",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://172.16.0.115:8000/user/list",
+					"protocol": "http",
+					"host": [
+						"172",
+						"16",
+						"0",
+						"115"
+					],
+					"port": "8000",
+					"path": [
+						"user",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
