@@ -129,52 +129,64 @@ def decode_token(request):
 
             if jwt_token:
                 payload =jwt_decode_handler(jwt_token)
-                user_id = payload['user_id']
-                
-                return payload       
+                user_id = payload.get('user_id')
+                if user_id is not None:
+                    return payload 
+                else:
+                    print('Invalid user_id in JWT payload')
+                    return False      
             else:
                 return False
+        else:
+            print('JWT token not found in Authorization header')
+            return False    
+        
     except Exception as error:
                 print('Error------>',error)
                 return False
         
 
 class SendOTP(APIView):
-    #to send OTP to email
+    # To send OTP to email
     def post(self, request):
         serializer = SendOTPSerializer(data= request.data)
         if serializer.is_valid():
-            email = serializer.validated_data['email']
-
-            generated_otp = str(random.randint(1000,9999))
-            otp_expiry = timezone.now() +timedelta(minutes=1, seconds=30)
-
             try:
+                email = serializer.validated_data['email']
+
+                generated_otp = str(random.randint(1000,9999))
+                otp_expiry = timezone.now() +timedelta(minutes=1, seconds=30)
+               
                 employee = Employee.objects.get(email=email)
+                
+                otp_object = OTP(employee=employee, otp= generated_otp, expiration_time=otp_expiry)
+                otp_object.save()
+                result = SendEmail(generated_otp, email)
+                if result: 
+                    return JsonResponse({"message":"OTP sent successfully"}, status=200)
+                else:
+                    return JsonResponse({"message":"OTP not sent "}, status=400)
             except Employee.DoesNotExist:
                 return JsonResponse({"message": "Employee not found." },status=401)
-            
-            otp_object = OTP(employee=employee, otp= generated_otp, expiration_time=otp_expiry)
-            otp_object.save()
-            result = SendEmail(generated_otp, email)
-            if result: 
-                return JsonResponse({"message":"OTP sent successfully"}, status=200)
-            else:
-                return JsonResponse({"message":"OTP not sent "}, status=400)
+            except Exception as error:
+                print("Error : ",error)
+                return JsonResponse({"error": "An unexpected error occurred: "+ str(error)},status=500)
         return JsonResponse({"error ": serializer.errors}, status=400)
+
 
 class VerifyOTP(APIView):
     def post(self, request):
         serializer = VerifyOTPSerializer(data=request.data)
 
         if serializer.is_valid():
-            email = serializer.validated_data['email']
-            entered_otp = serializer.validated_data['otp']
-
             try:
+                email = serializer.validated_data['email']
+                entered_otp = serializer.validated_data['otp']
+            
                 employee = Employee.objects.get(email=email)
                 otp_object = OTP.objects.get(employee=employee, otp= entered_otp)
 
+                # Check otp expiry time
                 if not otp_object.is_expired():
                     otp_object.delete()
 
@@ -201,13 +213,13 @@ class ChangePassword(APIView):
         serializer = ChangePasswordSerializer(data=request.data)
 
         if serializer.is_valid():
-            new_password = serializer.validated_data['new_password']
-
             try:
+                new_password = serializer.validated_data['new_password']
+
                 request.user.set_password(new_password)
                 request.user.save()
                 
-                return JsonResponse({"message":"Password changed successfully"},status= status.HTTP_200_OK)
+                return JsonResponse({"message":"Password changed successfully"},status=200)
             except Exception as error:
                 return JsonResponse({"error": str(error)},status=500)
         else:
@@ -243,6 +255,8 @@ class DeleteEmployee(APIView):
             employee.is_active = False
             employee.save()
             return JsonResponse({"message":"Employee deleted"},status=200) 
+        except Employee.DoesNotExist:
+            return JsonResponse({"message":"Employee not found"}, status=404)
         except Exception as error:
             print(error)
             return JsonResponse({"error":str(error)},status=500)

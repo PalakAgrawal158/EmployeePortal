@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .serializers import *
 from django.http import JsonResponse
 from .models import Holidays
-
+from django.utils import timezone
 
 # Create your views here.
 
@@ -31,10 +31,11 @@ class DeleteHoliday(APIView):
             holiday = Holidays.objects.get(pk= holiday_id)
             holiday.delete()
             return JsonResponse({"message":"Holiday deleted"},status=200) 
+        except Holidays.DoesNotExist:
+            return JsonResponse({"message": "Holiday not found." },status=404)
         except Exception as error:
             print(error)
             return JsonResponse({"error":str(error)},status=500)
-
 
 
 class UpdateHoliday(APIView):
@@ -59,10 +60,38 @@ class ViewHoliday(APIView):
     authentication_classes=[JWTAuthentication]
     permission_classes =[IsAuthenticated]
 
-    #To view holidays by everyone
+    # List all holidays
     def get(self, request):
-        holidays = Holidays.objects.all()      
-        serializer = HolidaySerializer(holidays, many=True)
-        return JsonResponse({"Holidays": serializer.data}, status= 200)
+        try:
+            holidays = Holidays.objects.all().order_by('date')   
+            if not holidays:
+                return JsonResponse({"message": "No holidays found","Holidays":[]}, status=404)
+   
+            serializer = HolidaySerializer(holidays, many=True)
+            return JsonResponse({"Holidays": serializer.data}, status= 200)
+        except Exception as error:
+            print("error : ",error)
+            return JsonResponse({"error": str(error)}, status=500)
+
+
+class ViewUpcommingHolidays(APIView):
+    authentication_classes=[JWTAuthentication]
+    permission_classes =[IsAuthenticated]
+
+    # List 3 upcomming holidays
+    def get(self, request):
+        try:
+            current_date = timezone.now().date()
+            upcomming_holidays = Holidays.objects.filter(date__gte =current_date).order_by('date')[:3]   
+            
+            if not upcomming_holidays:
+                return JsonResponse({"message": "No upcomming holidays found","Holidays":[]}, status=404)
+   
+            serializer = HolidaySerializer(upcomming_holidays, many=True)
+            return JsonResponse({"Upcomming Holidays": serializer.data}, status= 200)
+        except Exception as error:
+            print("error : ",error)
+            return JsonResponse({"error": str(error)}, status=500)
+
 
 
