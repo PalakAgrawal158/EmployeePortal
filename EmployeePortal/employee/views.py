@@ -34,9 +34,9 @@ class RegisterUser(APIView):
                 user = serializer.save()
                 return JsonResponse({'message' : 'Employee registered successfully'},status=200) 
             else:
-                return JsonResponse({"error": serializer.errors},status=status.HTTP_400_BAD_REQUEST)     
+                return JsonResponse({"error": serializer.errors},status=400)     
         except Exception as error:
-            return JsonResponse({"error": str(error)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return JsonResponse({"error": str(error)},status=500)
 
 #Login can be accessed by anyone
 class LoginUser(APIView):
@@ -63,7 +63,7 @@ class LoginUser(APIView):
        
         except Exception as error:
             print(error)
-            return JsonResponse({"error": str(error)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return JsonResponse({"error": str(error)},status=500)
 
 
 class ListEmployees(APIView):
@@ -89,9 +89,9 @@ class ListEmployees(APIView):
                              }
 
             return JsonResponse({"Employees":serializer.data,
-                                 "pagination_data":pagination_data},status= status.HTTP_200_OK)
+                                 "pagination_data":pagination_data},status=200)
         except Exception as error:
-            return JsonResponse({"error": str(error)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return JsonResponse({"error": "An unexpected error occurred: "+ str(error)},status=500)
 
 
 class EmployeeDetails(APIView):
@@ -100,40 +100,43 @@ class EmployeeDetails(APIView):
 
     #View specific employee details
     def get(self, request):
-        token = decode_token(request)
-        if token:
-            user_id = token['user_id']
-            try:
-                employee = Employee.objects.filter(pk=user_id).values()
-                if not employee:
-                    return JsonResponse({"message": "Employee not found"}, status=401)
-                serializer = EmployeeDetailsSerializer(employee, many=True)
-                return JsonResponse({"Employee":serializer.data},status= status.HTTP_200_OK)
-            except Exception as error:
-                return JsonResponse({"error": str(error)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        else:
-            return JsonResponse({'error': 'Authorization header missing'}, status=401)
+        try:
+            token = decode_token(request)
+            if token:
+                user_id = token.get('user_id') 
+                if user_id is not None:              
+                    employee = Employee.objects.filter(pk=user_id).values()
+                    if not employee:
+                        return JsonResponse({"message": "Employee not found"}, status=404)
+                    serializer = EmployeeDetailsSerializer(employee, many=True)
+                    return JsonResponse({"Employee":serializer.data},status=200)  
+                else:
+                    return JsonResponse({'error': 'Invalid or missing user_id in token'}, status=400)              
+            else:
+                return JsonResponse({'error': 'Authorization header missing'}, status=400)         
+        except Exception as error:
+                print("error ",error)
+                return JsonResponse({"error": str(error)},status=500)
 
 
 #To decode the jwt token 
 def decode_token(request):
-    header = request.headers.get('Authorization')
+    try:
+        header = request.headers.get('Authorization')
 
-    if header and header.startswith('Bearer '):
-        jwt_token = header.split(' ')[1]
+        if header and header.startswith('Bearer '):
+            jwt_token = header.split(' ')[1]
 
-        if jwt_token:
-            try:
+            if jwt_token:
                 payload =jwt_decode_handler(jwt_token)
                 user_id = payload['user_id']
-                # user = Employee.objects.filter(pk=user_id).values()
-                return payload
-            
-            except Exception as error:
+                
+                return payload       
+            else:
+                return False
+    except Exception as error:
                 print('Error------>',error)
-                return False        
-        else:
-            return False
+                return False
         
 
 class SendOTP(APIView):
