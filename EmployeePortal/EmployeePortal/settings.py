@@ -13,8 +13,14 @@ import dj_database_url
 from pathlib import Path
 import datetime
 import os 
+import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+import environ
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
 
 
 # Quick-start development settings - unsuitable for production
@@ -24,7 +30,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-d7bn#_c)=a#(1s&s@7u2_6!840mzffol1s%1l0g2x2l4nf^gqk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = os.environ.get('DEBUG', "False").lower() == "true"
+
 
 ALLOWED_HOSTS = ['employee-portal-render.onrender.com','172.16.0.115', 'localhost','127.0.0.1']
 
@@ -106,7 +114,8 @@ DATABASES = {
     }
 }
 
-DATABASES['default'] = dj_database_url.parse("postgres://employeeportal_user:OJw1yToeK0RmBXQ9d17pQ7B6MmQplzq2@dpg-cjlfd55k5scs73et7cig-a.oregon-postgres.render.com/employeeportal")
+database_url = os.environ.get("DATABASE_URL")
+DATABASES['default'] = dj_database_url.parse(database_url)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -177,5 +186,5 @@ EMAIL_HOST = 'smtp-mail.outlook.com'
 EMAIL_USE_TLS = False
 EMAIL_PORT = 587
 EMAIL_USE_SSL = False
-EMAIL_HOST_USER = 'palak.a@sankeysolutions.com'
-EMAIL_HOST_PASSWORD = 'gudiya@123'
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
