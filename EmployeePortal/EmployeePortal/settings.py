@@ -9,10 +9,10 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import dj_database_url
 from pathlib import Path
 import datetime
-import os
+import os 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-d7bn#_c)=a#(1s&s@7u2_6!840mzffol1s%1l0g2x2l4nf^gqk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['172.16.0.115', 'localhost','127.0.0.1']
+ALLOWED_HOSTS = ['employee-portal-render.onrender.com','172.16.0.115', 'localhost','127.0.0.1']
 
 
 # Application definition
@@ -85,16 +85,28 @@ WSGI_APPLICATION = 'EmployeePortal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'EmployeePortal',
+#         'USER' : 'postgres',
+#         'PASSWORD' : 'Data@123',
+#         'HOST' : 'localhost'
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'EmployeePortal',
-        'USER' : 'postgres',
-        'PASSWORD' : 'Data@123',
-        'HOST' : 'localhost'
+        'NAME': 'EmployeePortal',       
+        'USER': 'postgres',      
+        'PASSWORD': 'Yogeshkun@509',   
+        'HOST': 'localhost',               
+        'PORT': '5432',                   
     }
 }
 
+DATABASES['default'] = dj_database_url.parse("postgres://employeeportal_user:OJw1yToeK0RmBXQ9d17pQ7B6MmQplzq2@dpg-cjlfd55k5scs73et7cig-a.oregon-postgres.render.com/employeeportal")
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -167,4 +179,3 @@ EMAIL_PORT = 587
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'palak.a@sankeysolutions.com'
 EMAIL_HOST_PASSWORD = 'gudiya@123'
-
