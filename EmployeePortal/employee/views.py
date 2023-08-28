@@ -76,7 +76,7 @@ class ListEmployees(APIView):
             employees = Employee.objects.filter(is_active=True)
           
             paginator= PageNumberPagination()
-            paginator.page_size = 2
+            paginator.page_size = 10
 
             paginated_employees = paginator.paginate_queryset(employees, request)
 
